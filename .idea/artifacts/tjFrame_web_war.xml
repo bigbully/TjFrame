@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="tjFrame-web:war">
+    <output-path>$PROJECT_DIR$/modules/web/target</output-path>
+    <root id="archive" name="tjFrame-web.war">
+      <element id="artifact" artifact-name="tjFrame-web:war exploded" />
+    </root>
+  </artifact>
+</component>

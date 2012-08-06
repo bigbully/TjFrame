@@ -1,0 +1,26 @@
+@charset "utf-8";
+/* CSS Document */
+
+.style_addButton{background:url(images/add.png) no-repeat;}
+.style_editButton{background:url(images/edit.png) no-repeat;}
+.style_delButton{background:url(images/delete.png) no-repeat;}
+.style_confirmButton{background:url(images/confirm.png) no-repeat;}
+.style_closeButton{background:url(images/close.png) no-repeat;}
+.style_viewButton{background:url(images/view.png) no-repeat;}
+.style_searchButton{background:url(images/search.png) no-repeat;}
+
+.gridDiv {
+    margin: 7px;
+}
+.form_submitDiv{text-align:right; border-top:1px #ccc solid;padding:6px 10px 6px 6px;width:auto;clear:both;margin-top:8px;position: relative;}
+.gridButton {
+    text-align: right;
+    margin-bottom: 7px;
+}
+.multiLabelDisabled {
+    color: #C0C5C7
+}
+.dynamicDiv {background:url(images/dynamic.png) no-repeat center top;}
+.searchInput {
+    color:#A6A6A6;
+}

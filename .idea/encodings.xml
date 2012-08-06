@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding" useUTFGuessing="false" native2AsciiForPropertiesFiles="false" defaultCharsetForPropertiesFiles="GBK">
+    <file url="file://$PROJECT_DIR$/modules/common/src/main/resources/conf/h2/schema.sql" charset="GBK" />
+  </component>
+</project>
+

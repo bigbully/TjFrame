@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:jee="http://www.springframework.org/schema/jee" xmlns:tx="http://www.springframework.org/schema/tx" xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-3.0.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-3.0.xsd"
+	default-lazy-init="true">
+
+	<!-- sqlserver的配置 -->
+	<!--<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">-->
+		<!--<property name="driverClassName" value="net.sourceforge.jtds.jdbc.Driver"/>-->
+		<!--<property name="url" value="jdbc:jtds:sqlserver://localhost:1433/grid"/>-->
+		<!--<property name="username" value="abrsetms"/>-->
+		<!--<property name="password" value="abrsetms123"/>-->
+		<!--<property name="maxActive" value="20"/>-->
+		<!--&lt;!&ndash;property name="whenExhaustedAction" value="1"/&ndash;&gt;-->
+		<!--<property name="maxWait" value="100"/>-->
+		<!--<property name="maxIdle" value="10"/>-->
+		<!--<property name="initialSize" value="5"/>-->
+		<!--<property name="testOnBorrow" value="true"/>-->
+	<!--</bean>-->
+
+    <!-- h2的配置 -->
+    <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName" value="org.h2.Driver"/>
+        <property name="url" value="jdbc:h2:mem:tjetms;DB_CLOSE_DELAY=-1" />
+        <property name="username" value="sa"/>
+        <property name="password" value=""/>
+    </bean>
+
+    <jdbc:initialize-database data-source="dataSource" ignore-failures="NONE">
+		<jdbc:script location="classpath:conf/h2/schema.sql" />
+	</jdbc:initialize-database>
+
+	<!-- Hibernate配置 -->
+	<bean id="sessionFactory" class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="namingStrategy">
+			<bean class="org.hibernate.cfg.ImprovedNamingStrategy" />
+		</property>
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">org.hibernate.dialect.SQLServerDialect</prop>
+				<prop key="hibernate.show_sql">false</prop>
+				<prop key="hibernate.hbm2ddl.auto">none</prop>
+				<prop key="hibernate.cache.provider_class">org.hibernate.cache.EhCacheProvider</prop>
+			</props>
+		</property>
+		<!-- jpa扫描model类的目录 -->
+		<property name="packagesToScan" value="com.taiji.frame.model" />
+	</bean>
+
+	<!-- 使用annotation 自动注册bean,并保证@Required,@Autowired的属性被注入 -->
+	<context:component-scan base-package="com.taiji.frame" />
+	
+	<!-- 事务管理器配置,单数据源事务 -->
+	<bean id="transactionManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	
+	<!-- 使用annotation定义事务 -->
+	<tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true"/>
+	
+	<!-- 使用AOP，用于审计功能 -->
+	<!-- 现在只在Dept类中做了实验，包括code, name, deptType.codeDesc。现在只有新增和编辑带日志记录功能，删除日志功能待开发 -->
+	<!-- 特别注意：为了实现日志功能ExecuteDAO中的public <X> X get(final Class entityClass, final Long id)方法，以及 -->
+	<!-- SecurityService中的getCurUser()必须加上只读事务的控制 -->
+	<!-- ExecuteDAO中要使用getWithStatelessSession方法通过ID获取被对比数据 -->
+	<!-- 打开以下内容，并在etms-web的pom.xml文件中引用etms-log子项目，即可开启日志功能 -->
+	<!-- 
+	<aop:aspectj-autoproxy/>
+	  -->
+</beans>

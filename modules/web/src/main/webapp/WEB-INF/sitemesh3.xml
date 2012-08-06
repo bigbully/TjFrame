@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sitemesh>
+	<mapping path="/*.action" decorator="/WEB-INF/decorators/default.jsp"/>
+	<mapping path="/*.ajax" decorator="/WEB-INF/decorators/ajax.jsp"/>
+	<mapping path="/*.blank" decorator="/WEB-INF/decorators/blank.jsp"/>
+</sitemesh>
